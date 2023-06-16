@@ -1,89 +1,111 @@
 //Announce for player
-const ANNOUNCE = "Hello ! Choose your weapon Rock, Paper or Scissors ?"; 
+const ANNOUNCE = "Hello ! Choose your weapon Rock, Paper or Scissors ?";
+//Number of round
+let numberOfWins = 5;
+//Loading
+let scorePlayer = 0;
+let scoreComputer= 0;
+let playerSelection = 'rock';
 
 // Randomly return Rock Paper or Scissors
 function getComputerChoice () {
     randomNumber = Math.floor (Math.random() * 3);
-    if (randomNumber == 0) {
+    if (randomNumber == 1) {
         return 'rock';
-    } else if (randomNumber == 1){
+    } else if (randomNumber == 2){
         return 'paper';
     } else {
-        return 'scissors'
+        return 'scissors';
     }
 } 
+let computerSelection = getComputerChoice();
+// Selector
+const roundResult = document.querySelector('.roundResult');
+const finalResult = document.querySelector('.finalResult');
+const score = document.querySelector('.score');
 
 function playRound(playerSelection, computerSelection) {
+    console.log("Avant la comparaison = " + computerSelection);
     // Insensitive playerSelection
     playerSelection = playerSelection.toLowerCase();
     //Issues of the game
-    const victory = "You win ! " + playerSelection + " beats " + computerSelection;
-    const defeat = "You loose ! " + computerSelection + " beats " + playerSelection;
-    const equality = "Equality " + playerSelection + " and " + computerSelection;
+    const victory = "Well done ! (you :) " + playerSelection + " wins (computer :) " + computerSelection;
+    const defeat = "You loose ! (you :) " + playerSelection + " loses against (computer :) " + computerSelection;
+    const equality = "Equality (you :) " + playerSelection + " (and computer :) " + computerSelection;
 
     if (playerSelection === computerSelection) {
-        return equality;
+        roundResult.textContent = equality;
     } else {
         //Rock comparison
         if (playerSelection === "rock"){
             if (computerSelection === "scissors"){
-                return victory;
+                scorePlayer ++;
+                roundResult.textContent = victory;
             } else {
-            return defeat;
+                scoreComputer += 1;
+                roundResult.textContent = defeat;
             }
         }
         //Paper comparison
         if (playerSelection === "paper"){
             if (computerSelection === "rock"){
-                return victory;
+                scorePlayer += 1;
+                roundResult.textContent = victory;
             } else {
-            return defeat;
+                scoreComputer += 1;
+                roundResult.textContent = defeat;
             }
         }
         //Scissors comparison
         if (playerSelection === "scissors"){
             if (computerSelection === "paper"){
-                return victory;
+                scorePlayer += 1;
+                roundResult.textContent = victory;
             } else {
-            return defeat;
+                scoreComputer += 1;
+                roundResult.textContent = defeat;
             }
         }
     }
+    //Score of round
+    let textScore = "You =  " + scorePlayer + " Computer =  " + scoreComputer;
+    console.log(scorePlayer + " " + scoreComputer);
+    score.textContent = textScore;
   }
 
-let playerSelection = 'rock';
-const computerSelection = getComputerChoice();
+const rockButton = document.querySelector('.rockButton');
+const paperButton = document.querySelector('.paperButton');
+const scissorsButton = document.querySelector('.scissorsButton');
 
-function game (){
-    let scorePlayer = 0;
-    let scoreComputer = 0;
-
-    for (let i = 0; i < 5; i++){
-        let playerSelection = prompt (ANNOUNCE);
-        let computerSelection = getComputerChoice();
-
-        if (playRound(playerSelection, computerSelection).startsWith('You win')){
-            scorePlayer ++; 
-            console.log (scorePlayer);
-        } else if (playRound(playerSelection, computerSelection).startsWith ('You loose')){
-            scoreComputer ++;
-            console.log (scoreComputer);
+function finalRound() {
+    if (scorePlayer == numberOfWins || scoreComputer == numberOfWins) {
+        if (scorePlayer > scoreComputer) {
+            finalResult.textContent = "You are the winner";   
+        } else if (scorePlayer < scoreComputer) {
+            finalResult.textContent = "LOOSER ! Take your chance again";
+        } else {
+            finalResult.textContent = "Equality maybe for a next time";
         }
-
-        console.log(playRound(playerSelection, computerSelection));
-        let score = "You = " + scorePlayer + " Computer = " + scoreComputer;
-        console.log(score);
-
     }
+}
+function game() {
 
-    if (scorePlayer > scoreComputer){
-         console.log("You are the winner");
-    } else if(scorePlayer < scoreComputer) {
-        console.log("LOOSER ! Take your chance again");
-    } else {
-        console.log("Equality maybe for a next time");
-    }
-  }
+        rockButton.addEventListener('click', () => {
+            playRound('rock', computerSelection = getComputerChoice());
+            finalRound();
+        });
 
-game ();
+        paperButton.addEventListener('click', () => {
+            playRound('paper', computerSelection = getComputerChoice());
+            finalRound();
+        });
+
+        scissorsButton.addEventListener('click', () => {
+            playRound('scissors', computerSelection = getComputerChoice());
+            finalRound();
+        });
+}
+game();
+
+
 
